@@ -1,9 +1,9 @@
-import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import "./style.css";
 
 /**
  * Base
@@ -28,7 +28,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("/models/ImacTexc/PC.glb", (gltf) => {
+gltfLoader.load("/models/ImacTexc/iMac.gltf", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
   scene.add(gltf.scene);
   console.log(gltf);
