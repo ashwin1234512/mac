@@ -28,15 +28,17 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("models/ImacTexc/PC.glb", (gltf) => {
+gltfLoader.load("/models/untitled (1).gltf", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
+  gltf.scene.rotation.y = Math.PI;
+
   scene.add(gltf.scene);
-  console.log(gltf);
+  // console.log(gltf);
   mixer = new THREE.AnimationMixer(gltf.scene);
   gltf.animations.forEach((anim) => {
     const action = mixer.clipAction(anim);
     action.play();
-    console.log(anim);
+    // console.log(anim);
   });
 
   // Animation
@@ -55,15 +57,16 @@ const floor = new THREE.Mesh(
 );
 floor.receiveShadow = true;
 floor.rotation.x = -Math.PI * 0.5;
-// scene.add(floor);
+floor.position.y = -0.9;
+scene.add(floor);
 
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+const directionalLight = new THREE.DirectionalLight("purple", 2);
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.set(1024, 1024);
 directionalLight.shadow.camera.far = 15;
@@ -72,6 +75,7 @@ directionalLight.shadow.camera.top = 7;
 directionalLight.shadow.camera.right = 7;
 directionalLight.shadow.camera.bottom = -7;
 directionalLight.position.set(-5, 5, 0);
+
 scene.add(directionalLight);
 
 /**
