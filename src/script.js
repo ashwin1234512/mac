@@ -28,16 +28,16 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("/models/untitled.glb", (gltf) => {
+gltfLoader.load("models/ImacTexc/PC.glb", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
 
   scene.add(gltf.scene);
-  // console.log(gltf);
+  console.log(gltf);
   mixer = new THREE.AnimationMixer(gltf.scene);
   gltf.animations.forEach((anim) => {
     const action = mixer.clipAction(anim);
     action.play();
-    // console.log(anim);
+    console.log(anim);
   });
 
   // Animation
@@ -123,7 +123,7 @@ controls.enableDamping = true;
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
 });
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
