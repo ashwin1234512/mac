@@ -30,7 +30,6 @@ let mixer = null;
 
 gltfLoader.load("/models/untitled.glb", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
-  gltf.scene.rotation.y = Math.PI;
 
   scene.add(gltf.scene);
   // console.log(gltf);
@@ -63,10 +62,10 @@ floor.position.y = -0.9;
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+const ambientLight = new THREE.AmbientLight(0xffffff, 50);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight("purple", 2);
+const directionalLight = new THREE.DirectionalLight("white", 3);
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.set(1024, 1024);
 directionalLight.shadow.camera.far = 15;
