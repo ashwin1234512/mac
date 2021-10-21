@@ -28,7 +28,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("models/ImacTexc/PC.glb", (gltf) => {
+gltfLoader.load("models/untitled.glb", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
 
   scene.add(gltf.scene);
