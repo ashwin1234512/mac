@@ -28,7 +28,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("/models/untitled (1).gltf", (gltf) => {
+gltfLoader.load("/models/untitled.glb", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
   gltf.scene.rotation.y = Math.PI;
 
@@ -58,12 +58,12 @@ const floor = new THREE.Mesh(
 floor.receiveShadow = true;
 floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = -0.9;
-scene.add(floor);
+// scene.add(floor);
 
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight("purple", 2);
