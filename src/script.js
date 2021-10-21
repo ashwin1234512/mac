@@ -35,7 +35,7 @@ gltfLoader.load("models/ImacTexc/PC.glb", (gltf) => {
   mixer = new THREE.AnimationMixer(gltf.scene);
   gltf.animations.forEach((anim) => {
     const action = mixer.clipAction(anim);
-    action.stop();
+    action.play();
     console.log(anim);
   });
 
