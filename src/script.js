@@ -28,14 +28,14 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("/models/ImacTexc/iMac.gltf", (gltf) => {
+gltfLoader.load("models/ImacTexc/PC.glb", (gltf) => {
   gltf.scene.scale.set(1, 1, 1);
   scene.add(gltf.scene);
   console.log(gltf);
   mixer = new THREE.AnimationMixer(gltf.scene);
   gltf.animations.forEach((anim) => {
     const action = mixer.clipAction(anim);
-    action.play();
+    action.stop();
     console.log(anim);
   });
 
