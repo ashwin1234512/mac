@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+// import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import "./style.css";
 
 // Canvas
@@ -12,21 +14,39 @@ const scene = new THREE.Scene();
 /**
  * Models
  */
-const fbxLoader = new FBXLoader();
+// const fbxLoader = new FBXLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("/draco/");
+
+const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-fbxLoader.load("models/pc.fbx", (fbx) => {
-  fbx.scale.set(1, 1, 1);
-  fbx.position.set(0, 0, 0);
+// fbxLoader.load("/models/pc.fbx", (fbx) => {
+//   fbx.scale.set(1, 1, 1);
+//   fbx.position.set(0, 0, 0);
 
-  mixer = new THREE.AnimationMixer(fbx);
-  fbx.animations.forEach((anim) => {
-    mixer.clipAction(anim).play();
+//   mixer = new THREE.AnimationMixer(fbx);
+//   fbx.animations.forEach((anim) => {
+//     mixer.clipAction(anim).play();
+//   });
+
+//   console.log(fbx);
+//   scene.add(fbx);
+// });
+
+gltfLoader.load("/models/pc.gltf", (gltf) => {
+  gltf.scene.scale.set(1, 1, 1);
+  gltf.scene.position.set(0, 0, 0);
+
+  scene.add(gltf.scene);
+  mixer = new THREE.AnimationMixer(gltf.scene);
+
+  gltf.animations.forEach((anim) => {
+    const action = mixer.clipAction(anim);
+    action.play();
   });
-
-  console.log(fbx);
-  scene.add(fbx);
 });
 
 /**
@@ -69,7 +89,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000000
 );
-camera.position.set(500, 20, 50);
+camera.position.set(10, 5, 0);
 scene.add(camera);
 camera.lookAt(0, 10, 0);
 
