@@ -1,15 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import * as dat from "dat.gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import "./style.css";
-
-/**
- * Base
- */
-// Debug
-const gui = new dat.GUI();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -20,62 +12,28 @@ const scene = new THREE.Scene();
 /**
  * Models
  */
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath("/draco/");
-
-const gltfLoader = new GLTFLoader();
-gltfLoader.setDRACOLoader(dracoLoader);
+const fbxLoader = new FBXLoader();
 
 let mixer = null;
 
-gltfLoader.load("models/mac-full/untitled (2).gltf", (gltf) => {
-  gltf.scene.scale.set(1, 1, 1);
+fbxLoader.load("models/pc.fbx", (fbx) => {
+  fbx.scale.set(1, 1, 1);
+  fbx.position.set(0, 0, 0);
 
-  scene.add(gltf.scene);
-  console.log(gltf);
-  mixer = new THREE.AnimationMixer(gltf.scene);
-  gltf.animations.forEach((anim) => {
-    const action = mixer.clipAction(anim);
-    action.play();
-    console.log(anim);
+  mixer = new THREE.AnimationMixer(fbx);
+  fbx.animations.forEach((anim) => {
+    mixer.clipAction(anim).play();
   });
 
-  // Animation
+  console.log(fbx);
+  scene.add(fbx);
 });
-
-/**
- * Floor
- */
-const floor = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(10, 10),
-  new THREE.MeshStandardMaterial({
-    color: "#444444",
-    metalness: 0,
-    roughness: 0.5,
-  })
-);
-floor.receiveShadow = true;
-floor.rotation.x = -Math.PI * 0.5;
-floor.position.y = -0.9;
-// scene.add(floor);
 
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 50);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
-
-const directionalLight = new THREE.DirectionalLight("white", 3);
-directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.set(1024, 1024);
-directionalLight.shadow.camera.far = 15;
-directionalLight.shadow.camera.left = -7;
-directionalLight.shadow.camera.top = 7;
-directionalLight.shadow.camera.right = 7;
-directionalLight.shadow.camera.bottom = -7;
-directionalLight.position.set(-5, 5, 0);
-
-scene.add(directionalLight);
 
 /**
  * Sizes
@@ -86,6 +44,8 @@ const sizes = {
 };
 
 window.addEventListener("resize", () => {
+  console.log(camera.position);
+
   // Update sizes
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
@@ -107,10 +67,11 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  1000000
 );
-camera.position.set(2, 2, 2);
+camera.position.set(500, 20, 50);
 scene.add(camera);
+camera.lookAt(0, 10, 0);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
@@ -120,7 +81,7 @@ controls.enableDamping = true;
 /**
  * Renderer
  */
-const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGL1Renderer({
   canvas: canvas,
 });
 renderer.shadowMap.enabled = false;
@@ -140,9 +101,7 @@ const tick = () => {
   previousTime = elapsedTime;
 
   // Model animation
-  if (mixer) {
-    mixer.update(deltaTime);
-  }
+  if (mixer) mixer.update(deltaTime);
 
   // Update controls
   controls.update();
